@@ -1,6 +1,6 @@
 ---
-import ThemeToggle from './ThemeToggle.astro';
-import LanguageSwitch from './LanguageSwitch.astro';
+// import ThemeToggle from "./ThemeToggle.astro";
+import LanguageSwitch from "./LanguageSwitch.astro";
 
 interface Props {
   navItems: { label: string; href: string }[];
@@ -14,7 +14,17 @@ const { navItems } = Astro.props;
     <div class="mobile-menu-header">
       <span class="logo-text">Menú</span>
       <button id="close-menu-btn" class="close-btn" aria-label="Cerrar menú">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -23,19 +33,21 @@ const { navItems } = Astro.props;
 
     <nav class="mobile-nav">
       <ul>
-        {navItems.map(item => (
-          <li>
-            <a href={item.href} class="mobile-nav-link">
-              {item.label}
-            </a>
-          </li>
-        ))}
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} class="mobile-nav-link">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
 
     <div class="mobile-menu-footer">
       <div class="actions-wrapper">
-        <ThemeToggle />
+        <!-- <ThemeToggle /> Por el momento estará en hide -->
         <div class="divider"></div>
         <LanguageSwitch />
       </div>
@@ -51,7 +63,10 @@ const { navItems } = Astro.props;
     width: 100%;
     height: 100vh;
     background-color: var(--bg); /* Use base bg directly first */
-    background: rgba(var(--bg-rgb, 15, 23, 42), 0.7); /* Fallback or manual value */
+    background: rgba(
+      var(--bg-rgb, 15, 23, 42),
+      0.7
+    ); /* Fallback or manual value */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 100;
@@ -60,12 +75,12 @@ const { navItems } = Astro.props;
     opacity: 0;
     pointer-events: none;
   }
-  
+
   :global([data-theme="light"]) .mobile-menu-overlay {
-      background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.7);
   }
   :global([data-theme="dark"]) .mobile-menu-overlay {
-      background: rgba(2, 6, 23, 0.8);
+    background: rgba(2, 6, 23, 0.8);
   }
 
   .mobile-menu-overlay.open {
@@ -83,7 +98,7 @@ const { navItems } = Astro.props;
     display: flex;
     flex-direction: column;
     padding: var(--space-6);
-    box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
     border-left: 1px solid var(--border);
   }
 
@@ -156,14 +171,14 @@ const { navItems } = Astro.props;
 
 <script>
   function setupMobileMenu() {
-    const overlay = document.getElementById('mobile-menu-overlay');
-    const closeBtn = document.getElementById('close-menu-btn');
+    const overlay = document.getElementById("mobile-menu-overlay");
+    const closeBtn = document.getElementById("close-menu-btn");
     // El botón open se maneja desde HeaderPremium
-    
+
     if (closeBtn && overlay) {
-      closeBtn.addEventListener('click', () => {
-        overlay.classList.remove('open');
-        document.body.style.overflow = '';
+      closeBtn.addEventListener("click", () => {
+        overlay.classList.remove("open");
+        document.body.style.overflow = "";
       });
     }
 
@@ -171,24 +186,24 @@ const { navItems } = Astro.props;
     /* Como el diseño actual cubre todo el ancho en mobile pequeño, puede q no sea necesario,
        pero si agrandamos el overlay, esto ayuda */
     if (overlay) {
-      overlay.addEventListener('click', (e) => {
+      overlay.addEventListener("click", (e) => {
         if (e.target === overlay) {
-          overlay.classList.remove('open');
-          document.body.style.overflow = '';
+          overlay.classList.remove("open");
+          document.body.style.overflow = "";
         }
       });
     }
 
     // Close on ESC key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && overlay?.classList.contains('open')) {
-        overlay.classList.remove('open');
-        document.body.style.overflow = '';
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay?.classList.contains("open")) {
+        overlay.classList.remove("open");
+        document.body.style.overflow = "";
       }
     });
   }
 
   // Ejecutar en navegación y view transitions
   setupMobileMenu();
-  document.addEventListener('astro:page-load', setupMobileMenu);
+  document.addEventListener("astro:page-load", setupMobileMenu);
 </script>
