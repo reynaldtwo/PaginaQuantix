@@ -1,0 +1,27 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: 'es' | 'en';
+}
+
+const { title, description, lang = 'es' } = Astro.props as Props;
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="product-page-wrapper">
+    <slot />
+  </div>
+</BaseLayout>
+
+<style>
+  /* Wrapper opcional por si necesitamos estilos específicos de producto
+     que no afecten al home (ej. padding-top extra si el header tape contenido) */
+  .product-page-wrapper {
+      /* El header es sticky y tiene padding, pero en producto 
+         a veces queremos un hero full screen o con padding top */
+      width: 100%;
+  }
+</style>

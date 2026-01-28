@@ -1,0 +1,282 @@
+---
+import Container from '../ui/Container.astro';
+import Badge from '../ui/Badge.astro';
+import Button from '../ui/Button.astro';
+import { products } from '../../data/products';
+
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  lang: 'es' | 'en';
+}
+
+const { id, title, description, lang } = Astro.props;
+---
+
+<section id={id} class="products-section">
+  <!-- Subtle tech background -->
+  <div class="section-bg-overlay"></div>
+  
+  <Container>
+    <div class="section-header">
+      <h2 class="section-title">{title}</h2>
+      <p class="section-desc">{description}</p>
+    </div>
+
+    <div class="products-list">
+      {products.map(product => (
+        <div class="product-card">
+          <div class="product-thumb">
+             <img src={product.thumbnail.src} alt={product.thumbnail.alt} class="thumb-img" />
+             <div class="thumb-overlay"></div>
+             {/* Removed Badges Overlay */}
+           </div>
+          
+          <div class="product-info">
+            <div class="info-content">
+              <h3 class="product-title">{product.title[lang]}</h3>
+              <p class="product-desc">{product.description[lang]}</p>
+              
+              <ul class="product-features">
+                {product.features[lang].map(feature => (
+                  <li>
+                     <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                       <polyline points="20 6 9 17 4 12"></polyline>
+                     </svg>
+                     <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="product-actions">
+              <Button 
+                href={product.href[lang]} 
+                target={product.target}
+                variant="glow"
+                class="w-full"
+              >
+                {lang === 'es' ? 'Explorar Solución' : 'Explore Solution'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .products-section {
+    position: relative;
+    padding: var(--space-32) 0 var(--space-40); /* Massive increase for separation */
+    background-color: var(--bg);
+    overflow: hidden;
+  }
+
+  .section-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
+  :global([data-theme="light"]) .products-section {
+    background-color: #fcfcfd;
+  }
+
+  .section-header {
+    position: relative;
+    z-index: 20; /* Fixed: Higher than cards to prevent overlap on hover */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--space-20);
+  }
+
+  .section-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 900;
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  :global([data-theme="light"]) .section-title {
+     color: #0f172a;
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+    max-width: 60ch;
+    margin: 0 auto;
+    font-weight: 500;
+  }
+
+  /* Grid Layout: Horizontal List (Side-by-Side) */
+  .products-list {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 1024px) {
+    .products-list {
+      grid-template-columns: repeat(2, 1fr); /* 2 Columns on Desktop */
+      gap: var(--space-12);
+    }
+  }
+
+  /* Vertical Pro Card for Grid */
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 32px;
+    overflow: hidden;
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+    height: 100%;
+  }
+
+  :global([data-theme="dark"]) .product-card {
+     background: rgba(15, 23, 42, 0.4);
+     backdrop-filter: blur(24px);
+     border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :global([data-theme="light"]) .product-card {
+     background: #fff;
+     border-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .product-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
+    border-color: var(--primary);
+  }
+
+  .product-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9; /* Widescreen aspect for impact */
+    overflow: hidden;
+    background: #0f172a;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .product-card:hover .thumb-img {
+    transform: scale(1.15);
+  }
+
+  .thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.8) 0%, transparent 60%);
+    z-index: 1;
+  }
+
+  .badges-overlay {
+    position: absolute;
+    top: var(--space-6);
+    left: var(--space-6);
+    display: flex;
+    gap: var(--space-2);
+    z-index: 2;
+  }
+
+  .compact-badge {
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 99px;
+  }
+
+  .product-info {
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    background: transparent;
+  }
+
+  @media (min-width: 1024px) {
+    .product-info {
+      padding: var(--space-10);
+    }
+  }
+
+  .product-title {
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.04em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .product-desc {
+    color: var(--text-muted);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+    font-weight: 450;
+  }
+
+  .product-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-10) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .product-features li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .check-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+    background: rgba(var(--primary-rgb), 0.1);
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    border-radius: 6px;
+  }
+
+  .product-actions {
+    margin-top: auto;
+  }
+
+  .w-full { width: 100%; }
+</style>

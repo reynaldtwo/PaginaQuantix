@@ -1,0 +1,158 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost' | 'link' | 'glow' | 'glass';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  target?: string;
+  disabled?: boolean;
+}
+
+const { 
+  variant = 'primary', 
+  size = 'md', 
+  href, 
+  type = 'button',
+  class: className,
+  target,
+  disabled = false,
+  ...rest
+} = Astro.props;
+
+const Element = href ? 'a' : 'button';
+---
+
+<Element
+  href={href}
+  type={!href ? type : undefined}
+  target={target}
+  class:list={[
+    'btn',
+    `btn--${variant}`,
+    `btn--${size}`,
+    className,
+    { disabled }
+  ]}
+  disabled={!href && disabled}
+  aria-disabled={disabled}
+  {...rest}
+>
+  <slot />
+</Element>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-full); /* More premium roundness */
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    line-height: var(--leading-none);
+    white-space: nowrap;
+  }
+
+  .btn:focus-visible {
+    box-shadow: 0 0 0 4px var(--focus-ring);
+  }
+
+  .btn.disabled,
+  .btn:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  /* Variants */
+  .btn--primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  .btn--primary:hover:not(.disabled) {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(47, 91, 255, 0.25);
+  }
+
+  .btn--secondary {
+    background-color: var(--surface-2);
+    color: var(--text);
+  }
+  .btn--secondary:hover:not(.disabled) {
+    background-color: var(--surface-3);
+    color: var(--primary);
+  }
+
+  .btn--ghost {
+    background-color: transparent;
+    color: var(--text-muted);
+  }
+  .btn--ghost:hover:not(.disabled) {
+    background-color: var(--surface-2);
+    color: var(--text);
+  }
+
+  .btn--link {
+    background-color: transparent;
+    color: var(--link);
+    padding: 0;
+    height: auto;
+    border-radius: 0;
+  }
+  .btn--link:hover:not(.disabled) {
+    color: var(--link-hover);
+    text-decoration: underline;
+  }
+
+  /* Sizes */
+  .btn--sm {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    height: 32px;
+    border-radius: var(--radius-sm);
+  }
+
+  .btn--md {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    height: 48px;
+  }
+
+  .btn--lg {
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-lg);
+    height: 56px;
+    border-radius: var(--radius-lg); /* More rounded for large buttons */
+  }
+
+  /* Premium Variants */
+  .btn--glow {
+    background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%); /* Vibrante a oscuro */
+    color: white;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); 
+    border: none;
+  }
+  .btn--glow:hover:not(.disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.5); /* Se expande en hover */
+  }
+
+  .btn--glass {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.8); /* Finer border */
+    color: white;
+    backdrop-filter: blur(4px);
+  }
+  .btn--glass:hover:not(.disabled) {
+    background: white;
+    color: #000;
+    border-color: white;
+    transform: translateY(-2px);
+  }
+</style>

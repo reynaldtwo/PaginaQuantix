@@ -1,0 +1,59 @@
+---
+const { currentLocale } = Astro;
+const { pathname } = Astro.url;
+
+// Lógica simple para switchear idioma en rutas equivalentes
+// Como tenemos rutas prefijadas /es/ y /en/, solo reemplazamos el prefijo.
+const targetLocale = currentLocale === 'es' ? 'en' : 'es';
+
+let targetPath = '';
+if (pathname.startsWith('/es/')) {
+    targetPath = pathname.replace('/es/', '/en/');
+} else if (pathname.startsWith('/en/')) {
+    targetPath = pathname.replace('/en/', '/es/');
+} else {
+    // Fallback simple
+    targetPath = `/${targetLocale}/`;
+}
+---
+
+<a href={targetPath} class="lang-switch" aria-label={`Change language to ${targetLocale.toUpperCase()}`}>
+  <span class:list={['lang-code', { active: currentLocale === 'es' }]}>ES</span>
+  <span class="divider">/</span>
+  <span class:list={['lang-code', { active: currentLocale === 'en' }]}>EN</span>
+</a>
+
+<style>
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .lang-switch:hover {
+    color: var(--text);
+    background-color: var(--surface-2);
+  }
+
+  .lang-code {
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+  }
+
+  .lang-code.active {
+    opacity: 1;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .divider {
+    opacity: 0.3;
+  }
+</style>

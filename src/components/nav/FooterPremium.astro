@@ -1,0 +1,138 @@
+---
+import Container from '../ui/Container.astro';
+
+interface Props {
+  navItems: { label: string; href: string }[];
+}
+
+const { navItems } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="footer-premium">
+  <Container>
+    <div class="footer-content">
+      <div class="brand-col">
+        <a href="/" class="brand-logo" aria-label="Quantix Software Home">
+           <!-- Placeholder Logo SVG (Swap via CSS controlled by parent theme) -->
+           <svg class="logo" width="140" height="40" viewBox="0 0 140 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <rect width="40" height="40" rx="8" fill="var(--primary)"/>
+             <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="white"/>
+             <text x="50" y="26" font-family="var(--font-heading)" font-size="20" font-weight="bold" fill="var(--text)">Quantix</text>
+           </svg>
+        </a>
+        <p class="tagline">Soluciones de software de nivel empresarial.</p>
+      </div>
+
+      <div class="nav-col">
+        <h4 class="col-title">Navegación</h4>
+        <ul class="footer-nav">
+          {navItems.map(item => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="legal-col">
+        <h4 class="col-title">Legal</h4>
+        <ul class="footer-nav">
+          <li><a href="#">Privacidad</a></li>
+          <li><a href="#">Términos</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {year} Quantix Software. Todos los derechos reservados.</p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .footer-premium {
+    background-color: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: var(--space-12) 0 var(--space-8);
+    margin-top: auto;
+  }
+  
+  :global([data-theme="dark"]) .footer-premium {
+      background-color: var(--bg); /* Blend with page bg in dark mode */
+      border-top: 1px solid var(--border);
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    margin-bottom: var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .footer-content {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+
+  .brand-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .tagline {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    max-width: 300px;
+    line-height: 1.6;
+  }
+
+  .col-title {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text); /* Stronger contrast for titles */
+    margin-bottom: var(--space-6);
+  }
+
+  .footer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .footer-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: all 0.2s ease;
+  }
+
+  .footer-nav a:hover {
+    color: var(--primary);
+    transform: translateX(2px);
+  }
+
+  .footer-bottom {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    color: var(--text-subtle);
+    font-size: var(--text-xs);
+  }
+
+  @media (min-width: 768px) {
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+</style>

@@ -1,0 +1,167 @@
+---
+/**
+ * ScrollToTop - Botón flotante premium para volver al inicio
+ * 
+ * Aparece al hacer scroll hacia abajo y permite volver rápidamente al inicio.
+ * Diseño "Pro" con glassmorphism, animación suave y soporte para tema claro/oscuro.
+ */
+
+interface Props {
+  /** Offset en pixeles antes de mostrar el botón */
+  showAfter?: number;
+}
+
+const { showAfter = 300 } = Astro.props;
+---
+
+<button 
+  id="scroll-to-top" 
+  class="scroll-to-top" 
+  aria-label="Volver al inicio"
+  data-show-after={showAfter}
+>
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    stroke-width="2.5" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  >
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
+<style>
+  .scroll-to-top {
+    position: fixed;
+    bottom: var(--space-8);
+    right: var(--space-8);
+    z-index: 99;
+    
+    /* Premium Glass Design */
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    
+    /* Icon */
+    color: white;
+    cursor: pointer;
+    
+    /* Centering */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Initial Hidden State */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.9);
+    
+    /* Smooth Transitions */
+    transition: 
+      opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0.4s,
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      background 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  
+  /* Visible State */
+  .scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+  
+  /* Hover State - Pro Glow Effect */
+  .scroll-to-top:hover {
+    background: rgba(99, 102, 241, 0.9);
+    border-color: rgba(129, 140, 248, 0.5);
+    box-shadow: 
+      0 8px 32px rgba(99, 102, 241, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    transform: translateY(-4px) scale(1.05);
+  }
+  
+  .scroll-to-top:active {
+    transform: translateY(0) scale(0.98);
+  }
+  
+  /* Light Theme - Use primary color for visibility */
+  :global([data-theme="light"]) .scroll-to-top {
+    background: var(--primary);
+    border-color: transparent;
+    color: white;
+    box-shadow: 
+      0 8px 32px rgba(99, 102, 241, 0.3),
+      0 0 0 1px rgba(99, 102, 241, 0.1) inset;
+  }
+  
+  :global([data-theme="light"]) .scroll-to-top:hover {
+    background: #4f46e5;
+    box-shadow: 
+      0 12px 40px rgba(99, 102, 241, 0.45),
+      0 0 25px rgba(99, 102, 241, 0.35);
+    transform: translateY(-4px) scale(1.08);
+  }
+  
+  /* Mobile Adjustments */
+  @media (max-width: 768px) {
+    .scroll-to-top {
+      width: 48px;
+      height: 48px;
+      bottom: var(--space-6);
+      right: var(--space-6);
+    }
+    
+    .scroll-to-top svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>
+
+<script>
+  function setupScrollToTop() {
+    const btn = document.getElementById('scroll-to-top');
+    if (!btn) return;
+    
+    const showAfter = parseInt(btn.dataset.showAfter || '300', 10);
+    
+    // Show/Hide based on scroll position
+    const toggleVisibility = () => {
+      if (window.scrollY > showAfter) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    };
+    
+    // Smooth scroll to top on click
+    btn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Initial check + scroll listener
+    toggleVisibility();
+    window.addEventListener('scroll', toggleVisibility, { passive: true });
+  }
+  
+  setupScrollToTop();
+  document.addEventListener('astro:page-load', setupScrollToTop);
+</script>
