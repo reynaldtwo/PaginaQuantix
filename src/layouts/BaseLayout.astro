@@ -1,33 +1,33 @@
 ---
-import HeaderPremium from '../components/nav/HeaderPremium.astro';
-import FooterPremium from '../components/nav/FooterPremium.astro';
-import ScrollToTop from '../components/ui/ScrollToTop.astro';
-import { ViewTransitions } from 'astro:transitions';
-import '../styles/global.css';
+import HeaderPremium from "../components/nav/HeaderPremium.astro";
+import FooterPremium from "../components/nav/FooterPremium.astro";
+import ScrollToTop from "../components/ui/ScrollToTop.astro";
+import { ViewTransitions } from "astro:transitions";
+import "../styles/global.css";
 
 interface Props {
   title: string;
   description: string;
-  lang?: 'es' | 'en';
+  lang?: "es" | "en";
 }
 
-const { title, description, lang = 'es' } = Astro.props;
+const { title, description, lang = "es" } = Astro.props;
 
 // Configuración de navegación por idioma
-const navItems = lang === 'es' 
-  ? [
-      { label: 'Inicio', href: '#inicio' },
-      { label: 'Funciones', href: '#funciones' },
-      { label: 'Productos', href: '#productos' },
-      { label: 'Contacto', href: '#contacto' },
-    ]
-  : [
-      { label: 'Home', href: '#home' },
-      { label: 'Features', href: '#features' },
-      { label: 'Products', href: '#products' },
-      { label: 'Contact', href: '#contact' },
-    ];
-
+const navItems =
+  lang === "es"
+    ? [
+        { label: "Inicio", href: "#inicio" },
+        { label: "Servicios", href: "#funciones" },
+        { label: "Productos", href: "#productos" },
+        { label: "Contacto", href: "#contacto" },
+      ]
+    : [
+        { label: "Home", href: "#home" },
+        { label: "Features", href: "#features" },
+        { label: "Products", href: "#products" },
+        { label: "Contact", href: "#contact" },
+      ];
 ---
 
 <!doctype html>
@@ -39,19 +39,19 @@ const navItems = lang === 'es'
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title} | Quantix Software</title>
-    
+
     <!-- View Transitions para navegación SPA-like suave -->
     <ViewTransitions />
   </head>
   <body>
     <HeaderPremium navItems={navItems} />
-    
+
     <main>
       <slot />
     </main>
 
     <FooterPremium navItems={navItems} />
-    
+
     <!-- Premium Floating "Back to Top" Button -->
     <ScrollToTop />
   </body>
