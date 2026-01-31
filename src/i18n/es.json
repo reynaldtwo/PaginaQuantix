@@ -2,5 +2,11 @@
     "nav.home": "Inicio",
     "nav.features": "Funciones",
     "nav.products": "Productos",
-    "nav.contact": "Contacto"
+    "nav.contact": "Contacto",
+    "services.title": "Servicios de desarrollo a medida",
+    "services.subtitle": "Diseñamos, construimos e integramos software listo para producción: rápido, seguro y escalable. Priorizamos modernización, datos, seguridad y capacidades de IA porque hoy es lo que más presionan las empresas.",
+    "services.cta.schedule": "Agendar una llamada",
+    "services.cta.proposal": "Solicitar propuesta",
+    "services.nav.prev": "Anterior",
+    "services.nav.next": "Siguiente"
 }

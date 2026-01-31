@@ -1,30 +1,25 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import HeroSection from '../../components/sections/HeroSection.astro';
-import CapabilitiesGrid from '../../components/sections/CapabilitiesGrid.astro';
-import ProductsGrid from '../../components/sections/ProductsGrid.astro';
-import TrustSection from '../../components/sections/TrustSection.astro';
-import ContactSection from '../../components/sections/ContactSection.astro';
-
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeroSection from "../../components/sections/HeroSection.astro";
+import ServicesCarousel from "../../components/sections/ServicesCarousel.astro";
+import ProductsGrid from "../../components/sections/ProductsGrid.astro";
+import TrustSection from "../../components/sections/TrustSection.astro";
+import ContactSection from "../../components/sections/ContactSection.astro";
 ---
 
-<BaseLayout 
-  title="Home" 
+<BaseLayout
+  title="Home"
   description="Premium enterprise management software tailored to your needs."
   lang="en"
 >
-  <HeroSection 
+  <HeroSection
     id="home"
     title="Transforming your company’s digital future"
     subtitle="We drive business efficiency with tailored technological solutions. Strategy, innovation, and tangible results for the digital era."
     lang="en"
   />
 
-  <CapabilitiesGrid 
-    id="features"
-    title="Limitless Power"
-    description="Discover all the possibilities our platform offers to scale your business."
-  />
+  <ServicesCarousel id="features" lang="en" />
 
   <ProductsGrid
     id="products"
@@ -33,16 +28,20 @@ import ContactSection from '../../components/sections/ContactSection.astro';
     lang="en"
   />
 
-  {/* 
+  {
+    /* 
     ============================================================
     SECTION TEMPORARILY DISABLED - "Our Clients"
     This client logos carousel section is temporarily deactivated.
     To reactivate it, simply uncomment the code below.
     ============================================================
-  */}
-  {/* <TrustSection
+  */
+  }
+  {
+    /* <TrustSection
     title="Companies that trust us"
-  /> */}
+  /> */
+  }
 
   <ContactSection
     id="contact"

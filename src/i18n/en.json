@@ -2,5 +2,11 @@
     "nav.home": "Home",
     "nav.features": "Features",
     "nav.products": "Products",
-    "nav.contact": "Contact"
+    "nav.contact": "Contact",
+    "services.title": "Custom development services",
+    "services.subtitle": "We design, build and integrate production-ready software: fast, secure and scalable. We prioritize modernization, data, security and AI capabilities because today it is what companies are pushing the most.",
+    "services.cta.schedule": "Schedule a call",
+    "services.cta.proposal": "Request a proposal",
+    "services.nav.prev": "Previous",
+    "services.nav.next": "Next"
 }
