@@ -21,12 +21,8 @@ const translatedServices = services.map((service) => ({
     description: service.description[lang],
 }));
 
-// Triplicamos para loop infinito
-const allCards = [
-    ...translatedServices,
-    ...translatedServices,
-    ...translatedServices,
-];
+// Use original list directly
+const allCards = translatedServices;
 ---
 
 <section id={id} class="services-section" aria-labelledby="services-title">
@@ -50,7 +46,6 @@ const allCards = [
         </div>
     </Container>
 
-    <!-- Carousel FUERA del Container para que ocupe todo el ancho -->
     <div class="carousel-wrapper">
         <div class="carousel-track" id="services-track">
             {
@@ -69,44 +64,14 @@ const allCards = [
 
     <Container>
         <div class="carousel-controls">
-            <button
-                id="prev-btn"
-                class="nav-btn"
-                aria-label={t["services.nav.prev"]}
-                type="button"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
+            <button id="prev-btn" class="nav-btn" aria-label={t["services.nav.prev"]} type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
             </button>
-            <button
-                id="next-btn"
-                class="nav-btn"
-                aria-label={t["services.nav.next"]}
-                type="button"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
+            <button id="next-btn" class="nav-btn" aria-label={t["services.nav.next"]} type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
@@ -116,121 +81,35 @@ const allCards = [
 </section>
 
 <script>
-    document.addEventListener("DOMContentLoaded", initCarousel);
     document.addEventListener("astro:page-load", initCarousel);
+    document.addEventListener("DOMContentLoaded", initCarousel);
 
-    function initCarousel(): void {
-        const track = document.getElementById(
-            "services-track",
-        ) as HTMLElement | null;
-        const prevBtn = document.getElementById(
-            "prev-btn",
-        ) as HTMLButtonElement | null;
-        const nextBtn = document.getElementById(
-            "next-btn",
-        ) as HTMLButtonElement | null;
+    function initCarousel() {
+        const track = document.getElementById("services-track");
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
 
-        if (!track || !prevBtn || !nextBtn) {
-            console.error("Carousel: Elementos no encontrados");
-            return;
-        }
+        if (!track || !prevBtn || !nextBtn) return;
 
-        const slides = track.querySelectorAll(".carousel-slide");
-        const totalSlides = slides.length;
-        const originalCount = totalSlides / 3; // Sabemos que hay 3 copias
+        // Scroll amount equal to card width + gap approx
+        const getScrollAmount = () => {
+             const card = track.querySelector('.carousel-slide');
+             return card ? (card as HTMLElement).offsetWidth + 24 : 340; 
+        };
 
-        let currentIndex = originalCount; // Empezar en el set del medio
-        let autoplayInterval: number | null = null;
-        const AUTOPLAY_DELAY = 2000;
-        const TRANSITION_DURATION = 400;
-
-        // Calcular el ancho de un slide
-        function getSlideWidth(): number {
-            const slide = slides[0] as HTMLElement;
-            if (!slide) return 300;
-            const style = getComputedStyle(slide);
-            const width = slide.offsetWidth;
-            const marginRight = parseInt(style.marginRight) || 0;
-            return width + marginRight;
-        }
-
-        // Mover a un índice específico
-        function goToSlide(index: number, animate: boolean = true): void {
-            const slideWidth = getSlideWidth();
-            const offset = index * slideWidth;
-
-            if (animate) {
-                track!.style.transition = `transform ${TRANSITION_DURATION}ms ease`;
-            } else {
-                track!.style.transition = "none";
-            }
-
-            track!.style.transform = `translateX(-${offset}px)`;
-            currentIndex = index;
-        }
-
-        // Manejar el loop infinito
-        function handleLoop(): void {
-            // Si estamos en el primer set, saltar al segundo
-            if (currentIndex < originalCount) {
-                setTimeout(() => {
-                    goToSlide(currentIndex + originalCount, false);
-                }, TRANSITION_DURATION);
-            }
-            // Si estamos en el tercer set, saltar al segundo
-            else if (currentIndex >= originalCount * 2) {
-                setTimeout(() => {
-                    goToSlide(currentIndex - originalCount, false);
-                }, TRANSITION_DURATION);
-            }
-        }
-
-        function next(): void {
-            goToSlide(currentIndex + 1, true);
-            handleLoop();
-        }
-
-        function prev(): void {
-            goToSlide(currentIndex - 1, true);
-            handleLoop();
-        }
-
-        function startAutoplay(): void {
-            stopAutoplay();
-            autoplayInterval = window.setInterval(next, AUTOPLAY_DELAY);
-        }
-
-        function stopAutoplay(): void {
-            if (autoplayInterval !== null) {
-                clearInterval(autoplayInterval);
-                autoplayInterval = null;
-            }
-        }
-
-        // Event listeners
         nextBtn.addEventListener("click", () => {
-            next();
-            stopAutoplay();
-            startAutoplay(); // Reiniciar después de interacción
+            track.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
         });
 
         prevBtn.addEventListener("click", () => {
-            prev();
-            stopAutoplay();
-            startAutoplay();
+            track.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
         });
-
-        // Pausar en hover
-        track.addEventListener("mouseenter", stopAutoplay);
-        track.addEventListener("mouseleave", startAutoplay);
-
-        // Inicializar
-        goToSlide(currentIndex, false);
-        startAutoplay();
     }
 </script>
 
 <style>
+/* ... Rest of styles remain same ... */
+    
     .services-section {
         position: relative;
         padding: var(--space-16) 0;
@@ -295,55 +174,62 @@ const allCards = [
         justify-content: center;
     }
 
-    /* CAROUSEL - Enfoque con transform en lugar de scroll */
+    /* CAROUSEL - Native Scroll Snap */
     .carousel-wrapper {
         position: relative;
-        overflow: hidden;
         width: 100%;
         padding: var(--space-8) 0;
-        /* Efecto de desvanecimiento en ambos extremos */
-        mask-image: linear-gradient(
-            to right,
-            transparent 0%,
-            black 10%,
-            black 90%,
-            transparent 100%
-        );
-        -webkit-mask-image: linear-gradient(
-            to right,
-            transparent 0%,
-            black 10%,
-            black 90%,
-            transparent 100%
-        );
     }
 
     .carousel-track {
         display: flex;
         gap: var(--space-6);
-        /* NO usamos scroll, usamos transform */
-        will-change: transform;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        
+        /* Hide scrollbar */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+        
+        /* Layout adjustments */
+        padding: 0 max(var(--space-6), calc(50% - 140px)); /* Center first/last item logic: 50% - half card width */
+    }
+
+    /* Hide scrollbar for Chrome/Safari/Opera */
+    .carousel-track::-webkit-scrollbar {
+        display: none;
     }
 
     .carousel-slide {
-        flex: 0 0 280px; /* Debe coincidir con ServiceCard width */
+        flex: 0 0 280px;
         width: 280px;
-        height: 200px; /* Debe coincidir con ServiceCard height */
+        scroll-snap-align: center;
+        /* No height restriction to allow content to flow if needed, or keeping it fixed */
+        height: auto; 
     }
 
     @media (min-width: 768px) {
+        .carousel-track {
+             padding: 0 max(var(--space-8), calc(50% - 150px));
+        }
         .carousel-slide {
             flex: 0 0 300px;
             width: 300px;
-            height: 210px;
         }
     }
 
     @media (min-width: 1024px) {
+         .carousel-track {
+            padding: 0 max(var(--space-8), calc(50% - 160px));
+            / * Optional: On desktop, maybe we don't want strict center snap for multiple items? 
+               Usually center snap is fine. 
+            */
+        }
         .carousel-slide {
             flex: 0 0 320px;
             width: 320px;
-            height: 220px;
         }
     }
 
