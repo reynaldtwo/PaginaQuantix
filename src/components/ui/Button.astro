@@ -1,26 +1,26 @@
 ---
 interface Props {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'link' | 'glow' | 'glass';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "ghost" | "link" | "glow" | "glass";
+  size?: "sm" | "md" | "lg";
   href?: string;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
   class?: string;
   target?: string;
   disabled?: boolean;
 }
 
-const { 
-  variant = 'primary', 
-  size = 'md', 
-  href, 
-  type = 'button',
+const {
+  variant = "primary",
+  size = "md",
+  href,
+  type = "button",
   class: className,
   target,
   disabled = false,
   ...rest
 } = Astro.props;
 
-const Element = href ? 'a' : 'button';
+const Element = href ? "a" : "button";
 ---
 
 <Element
@@ -28,11 +28,11 @@ const Element = href ? 'a' : 'button';
   type={!href ? type : undefined}
   target={target}
   class:list={[
-    'btn',
+    "btn",
     `btn--${variant}`,
     `btn--${size}`,
     className,
-    { disabled }
+    { disabled },
   ]}
   disabled={!href && disabled}
   aria-disabled={disabled}
@@ -133,9 +133,13 @@ const Element = href ? 'a' : 'button';
 
   /* Premium Variants */
   .btn--glow {
-    background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%); /* Vibrante a oscuro */
+    background: linear-gradient(
+      135deg,
+      #2563eb 0%,
+      #1e40af 100%
+    ); /* Vibrante a oscuro */
     color: white;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); 
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
     border: none;
   }
   .btn--glow:hover:not(.disabled) {
@@ -145,7 +149,7 @@ const Element = href ? 'a' : 'button';
 
   .btn--glass {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.8); /* Finer border */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Finer border */
     color: white;
     backdrop-filter: blur(4px);
   }

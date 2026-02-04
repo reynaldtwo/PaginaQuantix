@@ -1,32 +1,39 @@
 ---
-import Container from '../ui/Container.astro';
-import Button from '../ui/Button.astro';
+import Container from "../ui/Container.astro";
+import Button from "../ui/Button.astro";
 
 interface Props {
   id: string; // Para anclaje
   title: string;
   subtitle: string;
-  lang?: 'es' | 'en';
+  lang?: "es" | "en";
 }
 
-const { id, title, subtitle, lang = 'es' } = Astro.props;
+const { id, title, subtitle, lang = "es" } = Astro.props;
 
 // Language-aware button configuration
 const ctaContact = {
-  href: lang === 'es' ? '#contacto' : '#contact',
-  label: lang === 'es' ? 'Contactar' : 'Contact Us'
+  href: lang === "es" ? "#contacto" : "#contact",
+  label: lang === "es" ? "Contactar" : "Contact Us",
 };
 
 const ctaProducts = {
-  href: lang === 'es' ? '#productos' : '#products',
-  label: lang === 'es' ? 'Ver Productos' : 'View Products'
+  href: lang === "es" ? "#productos" : "#products",
+  label: lang === "es" ? "Ver Productos" : "View Products",
 };
 ---
 
 <section id={id} class="hero-section">
   <!-- Video Background -->
   <div class="video-background">
-    <video autoplay loop muted playsinline poster="/images/hero-poster.jpg" class="hero-video">
+    <video
+      autoplay
+      loop
+      muted
+      playsinline
+      poster="/images/hero-poster.jpg"
+      class="hero-video"
+    >
       <source src="/videos/hero.mp4" type="video/mp4" />
       <!-- Fallback or additional formats if needed -->
     </video>
@@ -37,10 +44,14 @@ const ctaProducts = {
     <div class="hero-content">
       <h1 class="hero-title">{title}</h1>
       <p class="hero-subtitle">{subtitle}</p>
-      
+
       <div class="hero-actions">
-        <Button href={ctaContact.href} size="lg" variant="glow">{ctaContact.label}</Button>
-        <Button href={ctaProducts.href} size="lg" variant="glass">{ctaProducts.label}</Button>
+        <Button href={ctaContact.href} size="lg" variant="glass"
+          >{ctaContact.label}</Button
+        >
+        <Button href={ctaProducts.href} size="lg" variant="glass"
+          >{ctaProducts.label}</Button
+        >
       </div>
     </div>
   </Container>
@@ -84,7 +95,7 @@ const ctaProducts = {
     /* Luxury radial overlay: light center, black edges */
     background: radial-gradient(
       circle at 50% 50%,
-      rgba(15, 23, 42, 0.4) 0%, 
+      rgba(15, 23, 42, 0.4) 0%,
       rgba(2, 6, 23, 0.95) 100%
     );
     z-index: 1;
@@ -126,10 +137,10 @@ const ctaProducts = {
     font-weight: 900;
     letter-spacing: -0.05em;
     margin-bottom: var(--space-6);
-    background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
   }
 
   .hero-subtitle {
@@ -161,25 +172,25 @@ const ctaProducts = {
   }
 
   @keyframes fadeInUp {
-    from { 
-      opacity: 0; 
-      transform: translateY(40px); 
+    from {
+      opacity: 0;
+      transform: translateY(40px);
     }
-    to { 
-      opacity: 1; 
-      transform: translateY(0); 
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 </style>
 
 <script>
   function setupHeroParallax() {
-    const hero = document.querySelector('.hero-section');
-    const bg = document.querySelector('.video-background');
-    
+    const hero = document.querySelector(".hero-section");
+    const bg = document.querySelector(".video-background");
+
     if (!hero || !bg) return;
-    
-    window.addEventListener('scroll', () => {
+
+    window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
       const heroHeight = hero.getBoundingClientRect().height;
       if (scrollY <= heroHeight) {
@@ -188,7 +199,7 @@ const ctaProducts = {
       }
     });
   }
-  
+
   setupHeroParallax();
-  document.addEventListener('astro:page-load', setupHeroParallax);
+  document.addEventListener("astro:page-load", setupHeroParallax);
 </script>
