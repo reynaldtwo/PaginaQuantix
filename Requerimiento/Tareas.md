@@ -141,12 +141,15 @@ Esto queda liviano, rápido y fácil de mantener (ideal para sitio global hostea
 
 
 
-**TAREA 1**
+**TAREA 2**
 
 Tómate un tiempo para analizar EL SIGUIENTE requerimiento "Requerimiento.md" y haz LA planificación donde incluya desde la creacion del proyecto y su arquitectura hasta la entrega completa del sitio. Considerando las reglas descritas en el archivo code-rules.md y apóyate del sitio web "https://docs.astro.build/es/getting-started/" para resolver los errores que aparezcan, así como para investigar sobre las buenas prácticas a la hora de escribir código.
 
+**SEccion Nuestros Productos**
 
-**FIX ENCONTRADOS**
-1. El carrucel no funciona, esta estatico.
+1. este texto:"Nuestros Productos" poner el mismo tipo y tamaño de letra que el titulo de la seccion "Servicios de desarrollo a medida" 
+2. Las tarjetas de producto reducir el tamaño en un 30%
+3. Las imagenes de las tarjetas que abarquen toda la tarjeta
+4. aplicar una especie de sobra oscura a las tarjetas para que el texto se pueda visualizar.
 
 

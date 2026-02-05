@@ -20,147 +20,224 @@ const translatedServices = services.map((service) => ({
     title: service.title[lang],
     description: service.description[lang],
 }));
+
+// Triplicamos para loop infinito
+const allCards = [
+    ...translatedServices,
+    ...translatedServices,
+    ...translatedServices,
+];
 ---
 
-<section
-    id={id}
-    class="services-carousel-section"
-    aria-labelledby="services-title"
->
-    <!-- Decorative background elements -->
+<section id={id} class="services-section" aria-labelledby="services-title">
     <div class="decor-blob decor-1"></div>
     <div class="decor-blob decor-2"></div>
 
     <Container>
-        <div class="section-layout">
-            <!-- Left side: Fixed content -->
-            <div class="info-sidebar">
-                <header class="sidebar-content">
-                    <h2 id="services-title" class="section-title">
-                        {t["services.title"]}
-                    </h2>
-                    <p class="section-subtitle">{t["services.subtitle"]}</p>
-
-                    <div class="cta-group">
-                        <Button variant="primary" href="#contacto">
-                            {t["services.cta.schedule"]}
-                        </Button>
-                        <Button variant="secondary" href="#contacto">
-                            {t["services.cta.proposal"]}
-                        </Button>
-                    </div>
-
-                    <!-- Carousel Controls -->
-                    <div
-                        class="carousel-nav"
-                        aria-label="Navegación de servicios"
-                    >
-                        <button
-                            id="prev-btn"
-                            class="nav-btn"
-                            aria-label={t["services.nav.prev"]}
-                            disabled
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                ><line x1="19" y1="12" x2="5" y2="12"
-                                ></line><polyline points="12 19 5 12 12 5"
-                                ></polyline></svg
-                            >
-                        </button>
-                        <button
-                            id="next-btn"
-                            class="nav-btn"
-                            aria-label={t["services.nav.next"]}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                ><line x1="5" y1="12" x2="19" y2="12"
-                                ></line><polyline points="12 5 19 12 12 19"
-                                ></polyline></svg
-                            >
-                        </button>
-                    </div>
-                </header>
+        <div class="section-header">
+            <h2 id="services-title" class="section-title">
+                {t["services.title"]}
+            </h2>
+            <p class="section-subtitle">{t["services.subtitle"]}</p>
+            <div class="cta-group">
+                <Button variant="primary" href="#contacto">
+                    {t["services.cta.schedule"]}
+                </Button>
+                <Button variant="secondary" href="#contacto">
+                    {t["services.cta.proposal"]}
+                </Button>
             </div>
+        </div>
+    </Container>
 
-            <!-- Right side: Carousel -->
-            <div class="carousel-container">
-                <ul id="services-track" class="carousel-track">
-                    {
-                        translatedServices.map((service) => (
-                            <ServiceCard
-                                icon={service.icon}
-                                title={service.title}
-                                description={service.description}
-                            />
-                        ))
-                    }
-                </ul>
-            </div>
+    <!-- Carousel FUERA del Container para que ocupe todo el ancho -->
+    <div class="carousel-wrapper">
+        <div class="carousel-track" id="services-track">
+            {
+                allCards.map((service, index) => (
+                    <div class="carousel-slide" data-index={index}>
+                        <ServiceCard
+                            icon={service.icon}
+                            title={service.title}
+                            description={service.description}
+                        />
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+
+    <Container>
+        <div class="carousel-controls">
+            <button
+                id="prev-btn"
+                class="nav-btn"
+                aria-label={t["services.nav.prev"]}
+                type="button"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+            <button
+                id="next-btn"
+                class="nav-btn"
+                aria-label={t["services.nav.next"]}
+                type="button"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
         </div>
     </Container>
 </section>
 
 <script>
-    const track = document.getElementById("services-track");
-    const prevBtn = document.getElementById("prev-btn") as HTMLButtonElement;
-    const nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
+    document.addEventListener("DOMContentLoaded", initCarousel);
+    document.addEventListener("astro:page-load", initCarousel);
 
-    if (track && prevBtn && nextBtn) {
-        const updateButtons = () => {
-            const { scrollLeft, scrollWidth, clientWidth } = track;
-            prevBtn.disabled = scrollLeft <= 10;
-            nextBtn.disabled = scrollLeft + clientWidth >= scrollWidth - 10;
-        };
+    function initCarousel(): void {
+        const track = document.getElementById(
+            "services-track",
+        ) as HTMLElement | null;
+        const prevBtn = document.getElementById(
+            "prev-btn",
+        ) as HTMLButtonElement | null;
+        const nextBtn = document.getElementById(
+            "next-btn",
+        ) as HTMLButtonElement | null;
 
-        const scroll = (direction: number) => {
-            const cardWidth = (track.firstElementChild as HTMLElement)
-                .offsetWidth;
-            const gap = parseInt(getComputedStyle(track).gap);
-            const step = cardWidth + gap;
+        if (!track || !prevBtn || !nextBtn) {
+            console.error("Carousel: Elementos no encontrados");
+            return;
+        }
 
-            track.scrollBy({
-                left: direction * step,
-                behavior: "smooth",
-            });
-        };
+        const slides = track.querySelectorAll(".carousel-slide");
+        const totalSlides = slides.length;
+        const originalCount = totalSlides / 3; // Sabemos que hay 3 copias
 
-        prevBtn.addEventListener("click", () => scroll(-1));
-        nextBtn.addEventListener("click", () => scroll(1));
+        let currentIndex = originalCount; // Empezar en el set del medio
+        let autoplayInterval: number | null = null;
+        const AUTOPLAY_DELAY = 2000;
+        const TRANSITION_DURATION = 400;
 
-        track.addEventListener("scroll", updateButtons);
-        // Initial check
-        window.addEventListener("load", updateButtons);
-        window.addEventListener("resize", updateButtons);
+        // Calcular el ancho de un slide
+        function getSlideWidth(): number {
+            const slide = slides[0] as HTMLElement;
+            if (!slide) return 300;
+            const style = getComputedStyle(slide);
+            const width = slide.offsetWidth;
+            const marginRight = parseInt(style.marginRight) || 0;
+            return width + marginRight;
+        }
+
+        // Mover a un índice específico
+        function goToSlide(index: number, animate: boolean = true): void {
+            const slideWidth = getSlideWidth();
+            const offset = index * slideWidth;
+
+            if (animate) {
+                track!.style.transition = `transform ${TRANSITION_DURATION}ms ease`;
+            } else {
+                track!.style.transition = "none";
+            }
+
+            track!.style.transform = `translateX(-${offset}px)`;
+            currentIndex = index;
+        }
+
+        // Manejar el loop infinito
+        function handleLoop(): void {
+            // Si estamos en el primer set, saltar al segundo
+            if (currentIndex < originalCount) {
+                setTimeout(() => {
+                    goToSlide(currentIndex + originalCount, false);
+                }, TRANSITION_DURATION);
+            }
+            // Si estamos en el tercer set, saltar al segundo
+            else if (currentIndex >= originalCount * 2) {
+                setTimeout(() => {
+                    goToSlide(currentIndex - originalCount, false);
+                }, TRANSITION_DURATION);
+            }
+        }
+
+        function next(): void {
+            goToSlide(currentIndex + 1, true);
+            handleLoop();
+        }
+
+        function prev(): void {
+            goToSlide(currentIndex - 1, true);
+            handleLoop();
+        }
+
+        function startAutoplay(): void {
+            stopAutoplay();
+            autoplayInterval = window.setInterval(next, AUTOPLAY_DELAY);
+        }
+
+        function stopAutoplay(): void {
+            if (autoplayInterval !== null) {
+                clearInterval(autoplayInterval);
+                autoplayInterval = null;
+            }
+        }
+
+        // Event listeners
+        nextBtn.addEventListener("click", () => {
+            next();
+            stopAutoplay();
+            startAutoplay(); // Reiniciar después de interacción
+        });
+
+        prevBtn.addEventListener("click", () => {
+            prev();
+            stopAutoplay();
+            startAutoplay();
+        });
+
+        // Pausar en hover
+        track.addEventListener("mouseenter", stopAutoplay);
+        track.addEventListener("mouseleave", startAutoplay);
+
+        // Inicializar
+        goToSlide(currentIndex, false);
+        startAutoplay();
     }
 </script>
 
 <style>
-    .services-carousel-section {
+    .services-section {
         position: relative;
-        padding: var(--space-24) 0;
+        padding: var(--space-16) 0;
         overflow: hidden;
         background: var(--bg);
     }
 
-    /* Decorative blobs */
     .decor-blob {
         position: absolute;
         border-radius: 50%;
@@ -172,44 +249,32 @@ const translatedServices = services.map((service) => ({
 
     .decor-1 {
         top: -10%;
-        right: -10%;
-        width: 400px;
-        height: 400px;
+        right: -5%;
+        width: 350px;
+        height: 350px;
         background: var(--primary-soft);
     }
 
     .decor-2 {
         bottom: -10%;
-        left: -10%;
-        width: 300px;
-        height: 300px;
+        left: -5%;
+        width: 250px;
+        height: 250px;
         background: var(--accent-soft);
     }
 
-    .section-layout {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: var(--space-12);
+    .section-header {
+        text-align: center;
+        margin-bottom: var(--space-12);
         position: relative;
         z-index: 1;
     }
 
-    @media (min-width: 1024px) {
-        .section-layout {
-            grid-template-columns: 400px 1fr;
-            align-items: center;
-        }
-    }
-
-    .info-sidebar {
-        padding-right: var(--space-8);
-    }
-
     .section-title {
-        font-size: clamp(2.25rem, 4vw, 3rem);
+        font-size: clamp(2rem, 4vw, 2.75rem);
         font-weight: 800;
         line-height: 1.1;
-        margin-bottom: var(--space-6);
+        margin-bottom: var(--space-4);
         color: var(--text);
         letter-spacing: -0.02em;
     }
@@ -218,20 +283,78 @@ const translatedServices = services.map((service) => ({
         font-size: var(--text-lg);
         color: var(--text-muted);
         line-height: 1.6;
-        margin-bottom: var(--space-10);
+        margin-bottom: var(--space-8);
+        max-width: 600px;
+        margin-inline: auto;
     }
 
     .cta-group {
         display: flex;
         flex-wrap: wrap;
         gap: var(--space-4);
-        margin-bottom: var(--space-12);
+        justify-content: center;
     }
 
-    /* Carousel Navigation */
-    .carousel-nav {
+    /* CAROUSEL - Enfoque con transform en lugar de scroll */
+    .carousel-wrapper {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding: var(--space-8) 0;
+        /* Efecto de desvanecimiento en ambos extremos */
+        mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%
+        );
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%
+        );
+    }
+
+    .carousel-track {
         display: flex;
-        gap: var(--space-3);
+        gap: var(--space-6);
+        /* NO usamos scroll, usamos transform */
+        will-change: transform;
+    }
+
+    .carousel-slide {
+        flex: 0 0 280px; /* Debe coincidir con ServiceCard width */
+        width: 280px;
+        height: 200px; /* Debe coincidir con ServiceCard height */
+    }
+
+    @media (min-width: 768px) {
+        .carousel-slide {
+            flex: 0 0 300px;
+            width: 300px;
+            height: 210px;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .carousel-slide {
+            flex: 0 0 320px;
+            width: 320px;
+            height: 220px;
+        }
+    }
+
+    /* Controls */
+    .carousel-controls {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-4);
+        margin-top: var(--space-8);
+        position: relative;
+        z-index: 1;
     }
 
     .nav-btn {
@@ -248,57 +371,14 @@ const translatedServices = services.map((service) => ({
         transition: all 0.3s ease;
     }
 
-    .nav-btn:hover:not(:disabled) {
+    .nav-btn:hover {
         background: var(--primary);
         color: white;
         border-color: var(--primary);
         transform: scale(1.05);
     }
 
-    .nav-btn:disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
+    .nav-btn:active {
+        transform: scale(0.95);
     }
-
-    /* Carousel Track */
-    .carousel-container {
-        mask-image: linear-gradient(to right, black 85%, transparent 100%);
-        margin: 0 calc(var(--space-4) * -1);
-        padding: 0 var(--space-4);
-    }
-
-    @media (min-width: 1024px) {
-        .carousel-container {
-            margin: 0;
-            padding: 0;
-        }
-    }
-
-    .carousel-track {
-        display: flex;
-        gap: var(--space-4);
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        scroll-snap-type: x mandatory;
-        padding: var(--space-4) 0;
-        scrollbar-width: none; /* Firefox */
-    }
-
-    .carousel-track::-webkit-scrollbar {
-        display: none; /* Chrome/Safari */
-    }
-
-    @media (min-width: 768px) {
-        .carousel-track {
-            gap: var(--space-6);
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .carousel-track {
-            gap: var(--space-8);
-        }
-    }
-
-    /* Responsive variables for cards are set in ServiceCard.astro style */
 </style>
