@@ -152,4 +152,29 @@ Tómate un tiempo para analizar EL SIGUIENTE requerimiento "Requerimiento.md" y 
 3. Las imagenes de las tarjetas que abarquen toda la tarjeta
 4. aplicar una especie de sobra oscura a las tarjetas para que el texto se pueda visualizar.
 
+**finalizado**
+
+
+
+
+
+
+**TAREA 3**
+
+Tómate un tiempo para analizar EL SIGUIENTE requerimiento "Requerimiento.md" y haz LA planificación donde incluya desde la creacion del proyecto y su arquitectura hasta la entrega completa del sitio. Considerando las reglas descritas en el archivo code-rules.md y apóyate del sitio web "https://docs.astro.build/es/getting-started/" para resolver los errores que aparezcan, así como para investigar sobre las buenas prácticas a la hora de escribir código.
+
+**Seccion Servicios de desarrollo a medida**
+
+1. Se debe conservar el carrucel y el funcionamiento que actualmente esta implementado.
+2. Quitar este texto:"Diseñamos, construimos e integramos software listo para producción: rápido, seguro y escalable. Priorizamos modernización, datos, seguridad y capacidades de IA porque hoy es lo que más presionan las empresas."
+3. En la parte izquierda de la seccion agrega una card , esta card sera la principal por ende sera mas grande y mas yamativa.
+4. arriba de card principal que crearas en el punto 3, agrega el titulo:"Servicios de desarrollo a medida"
+5. funcionamiento: la idea es que la card principal haga el papel de proyectar el contenido de las tarjetas que vayan pasando por debajo, para entender mejor mirar la imagen de un ejemplo que te hice en figma para que te des una mejor idea.
+
+antes de inciar analiza bien la tarea y haz la planificacion y asegurate de poder hacer rolback.
+
+
+
+revisa lo siguiente: La card principal no esta proyectando la card que coliciona con ella, esta proyectando otro, recordad que la idea es que cuando una card del carrucel llegue a impactarse contra la card principal , la card del carrucel desaparece y se proyecta en la card principal
+
 

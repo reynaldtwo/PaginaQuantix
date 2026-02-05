@@ -14,371 +14,535 @@ interface Props {
 const { id, lang } = Astro.props;
 const t = lang === "es" ? esTranslations : enTranslations;
 
-// Helper to get translated services
 const translatedServices = services.map((service) => ({
     ...service,
     title: service.title[lang],
     description: service.description[lang],
 }));
 
-// Triplicamos para loop infinito
+// Multiplicamos para loop infinito
 const allCards = [
+    ...translatedServices,
     ...translatedServices,
     ...translatedServices,
     ...translatedServices,
 ];
 ---
 
-<section id={id} class="services-section" aria-labelledby="services-title">
+<section
+    id={id}
+    class="services-section relative overflow-hidden"
+    aria-labelledby="services-title"
+>
     <div class="decor-blob decor-1"></div>
     <div class="decor-blob decor-2"></div>
 
     <Container>
-        <div class="section-header">
-            <h2 id="services-title" class="section-title">
-                {t["services.title"]}
-            </h2>
-            <p class="section-subtitle">{t["services.subtitle"]}</p>
-            <div class="cta-group">
-                <Button variant="primary" href="#contacto">
-                    {t["services.cta.schedule"]}
-                </Button>
-                <Button variant="secondary" href="#contacto">
-                    {t["services.cta.proposal"]}
-                </Button>
-            </div>
-        </div>
-    </Container>
+        <h2
+            id="services-title"
+            class="section-title text-center lg:text-left mb-12"
+        >
+            {t["services.title"]}
+        </h2>
+        <div class="master-grid">
+            <div class="main-column">
+                <div class="master-card glass-panel" id="master-card-container">
+                    <div class="master-content-wrapper" id="master-content">
+                        <div
+                            class="master-icon-container"
+                            id="master-icon-wrap"
+                        >
+                            <div
+                                id="master-icon"
+                                class="master-icon"
+                                set:html={""}
+                            />
+                        </div>
 
-    <!-- Carousel FUERA del Container para que ocupe todo el ancho -->
-    <div class="carousel-wrapper">
-        <div class="carousel-track" id="services-track">
-            {
-                allCards.map((service, index) => (
-                    <div class="carousel-slide" data-index={index}>
-                        <ServiceCard
-                            icon={service.icon}
-                            title={service.title}
-                            description={service.description}
-                        />
+                        <div class="master-text">
+                            <h3 id="master-title" class="master-title"></h3>
+                            <p id="master-desc" class="master-description"></p>
+                        </div>
                     </div>
-                ))
-            }
-        </div>
-    </div>
 
-    <Container>
-        <div class="carousel-controls">
-            <button
-                id="prev-btn"
-                class="nav-btn"
-                aria-label={t["services.nav.prev"]}
-                type="button"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-            </button>
-            <button
-                id="next-btn"
-                class="nav-btn"
-                aria-label={t["services.nav.next"]}
-                type="button"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-            </button>
+                    <div class="master-actions">
+                        <div class="w-full sm:w-auto">
+                            <Button
+                                variant="primary"
+                                href="#contacto"
+                                class="w-full justify-center"
+                            >
+                                {t["services.cta.schedule"]}
+                            </Button>
+                        </div>
+                        <div class="w-full sm:w-auto">
+                            <Button
+                                variant="secondary"
+                                href="#contacto"
+                                class="w-full justify-center"
+                            >
+                                {t["services.cta.proposal"]}
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div class="collision-ripple" id="collision-ripple"></div>
+                </div>
+            </div>
+
+            <div class="carousel-column">
+                <div class="carousel-mask">
+                    <div class="carousel-track" id="services-track">
+                        {
+                            allCards.map((service, index) => (
+                                <div
+                                    class="carousel-slide"
+                                    data-id={`${index}-${service.title.substring(0, 3)}`}
+                                    data-title={service.title}
+                                    data-desc={service.description}
+                                    data-icon={service.icon}
+                                >
+                                    <ServiceCard
+                                        icon={service.icon}
+                                        title={service.title}
+                                        description={service.description}
+                                    />
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div class="carousel-controls">
+                    <button
+                        id="prev-btn"
+                        class="nav-btn"
+                        aria-label={t["services.nav.prev"]}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><line x1="19" y1="12" x2="5" y2="12"
+                            ></line><polyline points="12 19 5 12 12 5"
+                            ></polyline></svg
+                        >
+                    </button>
+                    <button
+                        id="next-btn"
+                        class="nav-btn"
+                        aria-label={t["services.nav.next"]}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><line x1="5" y1="12" x2="19" y2="12"
+                            ></line><polyline points="12 5 19 12 12 19"
+                            ></polyline></svg
+                        >
+                    </button>
+                </div>
+            </div>
         </div>
     </Container>
 </section>
 
 <script>
-    document.addEventListener("DOMContentLoaded", initCarousel);
-    document.addEventListener("astro:page-load", initCarousel);
+    const iconsMap: Record<string, string> = {
+        compass:
+            '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+        palette:
+            '<circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.5-1.1-.3-.3-.5-.7-.5-1.1 0-.9.7-1.6 1.6-1.6H17c2.8 0 5-2.2 5-5 0-5.5-4.5-10-10-10z"/>',
+        layout: '<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/>',
+        smartphone:
+            '<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>',
+        link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+        "refresh-cw":
+            '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+        cloud: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+        database:
+            '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>',
+        cpu: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M12 2v2"/><path d="M9 2v2"/><path d="M2 15h2"/><path d="M2 12h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 12h2"/><path d="M20 9h2"/><path d="M15 20v2"/><path d="M12 20v2"/><path d="M9 20v2"/>',
+        "shield-check":
+            '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/>',
+        "git-merge":
+            '<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/>',
+        layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/> <polyline points="2 17 12 22 22 17"/> <polyline points="2 12 12 17 22 12"/>',
+    };
 
-    function initCarousel(): void {
-        const track = document.getElementById(
-            "services-track",
-        ) as HTMLElement | null;
-        const prevBtn = document.getElementById(
-            "prev-btn",
-        ) as HTMLButtonElement | null;
-        const nextBtn = document.getElementById(
-            "next-btn",
-        ) as HTMLButtonElement | null;
+    function initMasterCarousel() {
+        const track = document.getElementById("services-track");
+        if (!track) return;
 
-        if (!track || !prevBtn || !nextBtn) {
-            console.error("Carousel: Elementos no encontrados");
-            return;
+        const masterCard = document.getElementById("master-card-container");
+        const masterTitle = document.getElementById("master-title");
+        const masterDesc = document.getElementById("master-desc");
+        const masterIcon = document.getElementById("master-icon");
+        const ripple = document.getElementById("collision-ripple");
+
+        if (!masterTitle || !masterDesc || !masterIcon) return;
+
+        // State
+        let currentPos = 0;
+        let speed = 0.5;
+        let isPaused = false;
+        let animationId: number;
+        let lastProjectedId = "";
+        const gap = 24;
+
+        // Init
+        const first = track.firstElementChild as HTMLElement;
+        if (first) {
+            updateContent(first);
+            lastProjectedId = first.dataset.id || "";
         }
 
-        const slides = track.querySelectorAll(".carousel-slide");
-        const totalSlides = slides.length;
-        const originalCount = totalSlides / 3; // Sabemos que hay 3 copias
+        start();
 
-        let currentIndex = originalCount; // Empezar en el set del medio
-        let autoplayInterval: number | null = null;
-        const AUTOPLAY_DELAY = 2000;
-        const TRANSITION_DURATION = 400;
-
-        // Calcular el ancho de un slide
-        function getSlideWidth(): number {
-            const slide = slides[0] as HTMLElement;
-            if (!slide) return 300;
-            const style = getComputedStyle(slide);
-            const width = slide.offsetWidth;
-            const marginRight = parseInt(style.marginRight) || 0;
-            return width + marginRight;
+        function start() {
+            animationId = requestAnimationFrame(animate);
         }
 
-        // Mover a un índice específico
-        function goToSlide(index: number, animate: boolean = true): void {
-            const slideWidth = getSlideWidth();
-            const offset = index * slideWidth;
+        function animate() {
+            if (!isPaused) {
+                currentPos -= speed;
+                track!.style.transform = `translateX(${currentPos}px)`;
 
-            if (animate) {
-                track!.style.transition = `transform ${TRANSITION_DURATION}ms ease`;
-            } else {
-                track!.style.transition = "none";
+                const trackRect = track!.parentElement!.getBoundingClientRect();
+                const sensorX = trackRect.left + 150; // Sensor Point estable
+
+                // 1. Detección de Proyección Estable (Last-Crossed Logic)
+                const slides = Array.from(track!.children) as HTMLElement[];
+                // Buscamos la ULTIMA carta (la más a la derecha) que ha cruzado el sensor
+                // Esto garantiza que el orden sea secuencial sin saltarse ninguna
+                const newestImpact = slides
+                    .reverse()
+                    .find((s) => s.getBoundingClientRect().left < sensorX);
+
+                if (newestImpact) {
+                    const id = newestImpact.dataset.id || "";
+                    if (id !== lastProjectedId) {
+                        lastProjectedId = id;
+                        triggerProjection(newestImpact);
+                    }
+                }
+
+                // 2. Reciclaje DOM (Fuera de vista)
+                const first = track!.firstElementChild as HTMLElement;
+                if (first) {
+                    const rect = first.getBoundingClientRect();
+                    if (rect.right < trackRect.left - 50) {
+                        track!.appendChild(first);
+                        currentPos += rect.width + gap;
+                        track!.style.transform = `translateX(${currentPos}px)`;
+                    }
+                }
             }
-
-            track!.style.transform = `translateX(-${offset}px)`;
-            currentIndex = index;
+            animationId = requestAnimationFrame(animate);
         }
 
-        // Manejar el loop infinito
-        function handleLoop(): void {
-            // Si estamos en el primer set, saltar al segundo
-            if (currentIndex < originalCount) {
-                setTimeout(() => {
-                    goToSlide(currentIndex + originalCount, false);
-                }, TRANSITION_DURATION);
-            }
-            // Si estamos en el tercer set, saltar al segundo
-            else if (currentIndex >= originalCount * 2) {
-                setTimeout(() => {
-                    goToSlide(currentIndex - originalCount, false);
-                }, TRANSITION_DURATION);
-            }
-        }
+        function triggerProjection(slide: HTMLElement) {
+            // Animación suave de entrada
+            masterCard?.classList.add("absorbing");
 
-        function next(): void {
-            goToSlide(currentIndex + 1, true);
-            handleLoop();
-        }
+            // Programar el cambio de texto a mitad del fade
+            setTimeout(() => {
+                updateContent(slide);
+                masterCard?.classList.remove("absorbing");
+            }, 150); // Más rápido para evitar lag visual
 
-        function prev(): void {
-            goToSlide(currentIndex - 1, true);
-            handleLoop();
-        }
-
-        function startAutoplay(): void {
-            stopAutoplay();
-            autoplayInterval = window.setInterval(next, AUTOPLAY_DELAY);
-        }
-
-        function stopAutoplay(): void {
-            if (autoplayInterval !== null) {
-                clearInterval(autoplayInterval);
-                autoplayInterval = null;
+            if (ripple) {
+                ripple.classList.remove("active");
+                void ripple.offsetWidth;
+                ripple.classList.add("active");
             }
         }
 
-        // Event listeners
-        nextBtn.addEventListener("click", () => {
-            next();
-            stopAutoplay();
-            startAutoplay(); // Reiniciar después de interacción
+        function updateContent(slide: HTMLElement) {
+            masterTitle!.innerText = slide.dataset.title || "";
+            masterDesc!.innerText = slide.dataset.desc || "";
+            const iconName = slide.dataset.icon || "compass";
+            const svg = iconsMap[iconName] || iconsMap["compass"];
+            masterIcon!.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${svg}</svg>`;
+        }
+
+        // Navigation
+        document.getElementById("next-btn")?.addEventListener("click", () => {
+            isPaused = true;
+            const first = track!.firstElementChild as HTMLElement;
+            if (!first) return;
+
+            const cardW = first.offsetWidth + gap;
+            const startPos = currentPos;
+            const duration = 400;
+            let startT: number;
+
+            function step(t: number) {
+                if (!startT) startT = t;
+                const p = Math.min((t - startT) / duration, 1);
+                const ease = 1 - Math.pow(1 - p, 4);
+                currentPos = startPos - cardW * ease;
+                track!.style.transform = `translateX(${currentPos}px)`;
+
+                if (p < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    track!.appendChild(first);
+                    currentPos += cardW;
+                    track!.style.transform = `translateX(${currentPos}px)`;
+                    isPaused = false;
+                }
+            }
+            requestAnimationFrame(step);
         });
 
-        prevBtn.addEventListener("click", () => {
-            prev();
-            stopAutoplay();
-            startAutoplay();
+        document.getElementById("prev-btn")?.addEventListener("click", () => {
+            isPaused = true;
+            const last = track!.lastElementChild as HTMLElement;
+            if (!last) return;
+
+            const cardW = last.offsetWidth + gap;
+            track!.prepend(last);
+            currentPos -= cardW;
+            track!.style.transform = `translateX(${currentPos}px)`;
+
+            const startPos = currentPos;
+            const duration = 400;
+            let startT: number;
+
+            function step(t: number) {
+                if (!startT) startT = t;
+                const p = Math.min((t - startT) / duration, 1);
+                const ease = 1 - Math.pow(1 - p, 4);
+                track!.style.transform = `translateX(${startPos + cardW * ease}px)`;
+
+                if (p < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    currentPos += cardW;
+                    track!.style.transform = `translateX(${currentPos}px)`;
+                    isPaused = false;
+                }
+            }
+            requestAnimationFrame(step);
         });
 
-        // Pausar en hover
-        track.addEventListener("mouseenter", stopAutoplay);
-        track.addEventListener("mouseleave", startAutoplay);
-
-        // Inicializar
-        goToSlide(currentIndex, false);
-        startAutoplay();
+        const col = document.querySelector(".carousel-column");
+        col?.addEventListener("mouseenter", () => (isPaused = true));
+        col?.addEventListener("mouseleave", () => (isPaused = false));
     }
+
+    document.addEventListener("astro:page-load", initMasterCarousel);
+    document.addEventListener("DOMContentLoaded", initMasterCarousel);
 </script>
 
 <style>
     .services-section {
-        position: relative;
-        padding: var(--space-16) 0;
-        overflow: hidden;
         background: var(--bg);
+        padding: var(--space-12) 0;
+        position: relative;
+    }
+    .master-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+    }
+
+    @media (min-width: 1024px) {
+        .master-grid {
+            grid-template-columns: 480px 1fr;
+            gap: var(--space-12);
+            align-items: center;
+        }
+    }
+
+    .section-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(2rem, 3vw, 2.5rem);
+        font-weight: 800;
+        margin-bottom: var(--space-6);
+        color: var(--text);
+    }
+
+    .master-card {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: var(--space-8);
+        min-height: 550px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+    }
+
+    :global(.dark) .master-card {
+        background: linear-gradient(145deg, #1e293b, #0f172a);
+    }
+
+    .master-content-wrapper {
+        transition:
+            opacity 0.3s ease,
+            transform 0.3s ease;
+        will-change: opacity, transform;
+    }
+    .master-card.absorbing .master-content-wrapper {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    .master-icon-container {
+        width: 64px;
+        height: 64px;
+        background: var(--primary);
+        color: white;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: var(--space-6);
+        box-shadow: 0 8px 16px rgba(var(--primary-rgb), 0.3);
+    }
+    .master-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: var(--space-4);
+        line-height: 1.2;
+        color: var(--text);
+    }
+    .master-description {
+        font-size: 1.125rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+    }
+    .master-actions {
+        margin-top: var(--space-8);
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-4);
+    }
+
+    .collision-ripple {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 30px;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            rgba(var(--primary-rgb), 0.3),
+            transparent
+        );
+        transform: scaleX(0);
+        transform-origin: left;
+        pointer-events: none;
+        opacity: 0;
+    }
+    .collision-ripple.active {
+        animation: ripple-flash 0.6s ease-out forwards;
+    }
+    @keyframes ripple-flash {
+        0% {
+            transform: scaleX(0);
+            opacity: 1;
+        }
+        100% {
+            transform: scaleX(50);
+            opacity: 0;
+        }
+    }
+
+    .carousel-column {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        mask-image: linear-gradient(to right, transparent 0%, black 150px);
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            black 150px
+        );
+    }
+    .carousel-track {
+        display: flex;
+        gap: 24px;
+        will-change: transform;
+        padding: 20px 0;
+    }
+    .carousel-slide {
+        flex: 0 0 320px;
+        width: 320px;
+        opacity: 0.4;
+        filter: grayscale(100%);
+        transition: all 0.5s ease;
+        scale: 0.95;
+    }
+    .carousel-slide:hover {
+        opacity: 1;
+        filter: grayscale(0%);
+        scale: 1;
+    }
+
+    .carousel-controls {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-3);
+        margin-top: var(--space-8);
+    }
+    .nav-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--surface-2);
+        color: var(--text);
+        border: 1px solid var(--border);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
     }
 
     .decor-blob {
         position: absolute;
         border-radius: 50%;
-        filter: blur(80px);
+        filter: blur(100px);
         z-index: 0;
-        opacity: 0.4;
+        opacity: 0.15;
         pointer-events: none;
     }
-
     .decor-1 {
         top: -10%;
         right: -5%;
-        width: 350px;
-        height: 350px;
-        background: var(--primary-soft);
+        width: 500px;
+        height: 500px;
+        background: var(--primary);
     }
-
     .decor-2 {
         bottom: -10%;
         left: -5%;
-        width: 250px;
-        height: 250px;
-        background: var(--accent-soft);
-    }
-
-    .section-header {
-        text-align: center;
-        margin-bottom: var(--space-12);
-        position: relative;
-        z-index: 1;
-    }
-
-    .section-title {
-        font-size: clamp(2rem, 4vw, 2.75rem);
-        font-weight: 800;
-        line-height: 1.1;
-        margin-bottom: var(--space-4);
-        color: var(--text);
-        letter-spacing: -0.02em;
-    }
-
-    .section-subtitle {
-        font-size: var(--text-lg);
-        color: var(--text-muted);
-        line-height: 1.6;
-        margin-bottom: var(--space-8);
-        max-width: 600px;
-        margin-inline: auto;
-    }
-
-    .cta-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--space-4);
-        justify-content: center;
-    }
-
-    /* CAROUSEL - Enfoque con transform en lugar de scroll */
-    .carousel-wrapper {
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        padding: var(--space-8) 0;
-        /* Efecto de desvanecimiento en ambos extremos */
-        mask-image: linear-gradient(
-            to right,
-            transparent 0%,
-            black 10%,
-            black 90%,
-            transparent 100%
-        );
-        -webkit-mask-image: linear-gradient(
-            to right,
-            transparent 0%,
-            black 10%,
-            black 90%,
-            transparent 100%
-        );
-    }
-
-    .carousel-track {
-        display: flex;
-        gap: var(--space-6);
-        /* NO usamos scroll, usamos transform */
-        will-change: transform;
-    }
-
-    .carousel-slide {
-        flex: 0 0 280px; /* Debe coincidir con ServiceCard width */
-        width: 280px;
-        height: 200px; /* Debe coincidir con ServiceCard height */
-    }
-
-    @media (min-width: 768px) {
-        .carousel-slide {
-            flex: 0 0 300px;
-            width: 300px;
-            height: 210px;
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .carousel-slide {
-            flex: 0 0 320px;
-            width: 320px;
-            height: 220px;
-        }
-    }
-
-    /* Controls */
-    .carousel-controls {
-        display: flex;
-        justify-content: center;
-        gap: var(--space-4);
-        margin-top: var(--space-8);
-        position: relative;
-        z-index: 1;
-    }
-
-    .nav-btn {
-        width: 48px;
-        height: 48px;
-        border-radius: var(--radius-full);
-        border: 1px solid var(--border);
-        background: var(--surface);
-        color: var(--text);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .nav-btn:hover {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-        transform: scale(1.05);
-    }
-
-    .nav-btn:active {
-        transform: scale(0.95);
+        width: 400px;
+        height: 400px;
+        background: var(--accent);
     }
 </style>
